@@ -27,6 +27,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import webContainerService from '../services/webcontainer';
 import toast from 'react-hot-toast';
+import { getPreviewUrl } from '../config/config';
 
 const ProjectPreview = ({ project, fileStructure, selectedFile, mode, onFileSaved, isLivePreviewEnabled = false }) => {
   const [previewUrl, setPreviewUrl] = useState('');
@@ -194,7 +195,7 @@ const ProjectPreview = ({ project, fileStructure, selectedFile, mode, onFileSave
       
       if (htmlFile) {
         const timestamp = Date.now();
-        const directUrl = `http://localhost:5000/api/projects/${project._id}/preview/${encodeURIComponent(htmlFile.relativePath)}?v=${timestamp}`;
+        const directUrl = getPreviewUrl(project._id, htmlFile.relativePath, timestamp);
         console.log('Generated preview URL:', directUrl);
         setPreviewUrl(directUrl);
         setPreviewError(null);
@@ -216,7 +217,7 @@ const ProjectPreview = ({ project, fileStructure, selectedFile, mode, onFileSave
     const iframe = document.getElementById('preview-iframe');
     if (iframe && project && mainHtmlFile) {
       const timestamp = Date.now();
-      const newUrl = `http://localhost:5000/api/projects/${project._id}/preview/${encodeURIComponent(mainHtmlFile.relativePath)}?v=${timestamp}`;
+      const newUrl = getPreviewUrl(project._id, mainHtmlFile.relativePath, timestamp);
       console.log('🔄 Refreshing with URL:', newUrl);
       iframe.src = newUrl;
       setPreviewUrl(newUrl);

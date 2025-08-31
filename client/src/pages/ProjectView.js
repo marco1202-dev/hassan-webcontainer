@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { apiService } from '../services/api';
 import toast from 'react-hot-toast';
 import {
   Box,
@@ -71,7 +71,7 @@ const ProjectView = () => {
       const ext = file.name ? file.name.split('.').pop().toLowerCase() : '';
       
       if (textExtensions.includes(`.${ext}`)) {
-        const response = await axios.get(`/api/projects/${projectId}/files/${encodeURIComponent(file.relativePath)}`);
+        const response = await apiService.get(`/projects/${projectId}/files/${encodeURIComponent(file.relativePath)}`);
         setFileContent(response.data.content);
       } else {
         setFileContent('Binary file - cannot display content');
@@ -85,11 +85,11 @@ const ProjectView = () => {
   const fetchProject = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`/api/projects/${projectId}`);
+      const response = await apiService.get(`/projects/${projectId}`);
       setProject(response.data.project);
       
       // Fetch the actual file system structure
-      const structureResponse = await axios.get(`/api/projects/${projectId}/structure`);
+              const structureResponse = await apiService.get(`/projects/${projectId}/structure`);
       setFileStructure(structureResponse.data.structure);
       
       // Set default selected file (index.html if exists, or first file)
@@ -122,7 +122,7 @@ const ProjectView = () => {
     
     setSaving(true);
     try {
-      await axios.put(`/api/projects/${projectId}/files/${encodeURIComponent(file.relativePath)}`, {
+      await apiService.put(`/projects/${projectId}/files/${encodeURIComponent(file.relativePath)}`, {
         content: content
       });
       

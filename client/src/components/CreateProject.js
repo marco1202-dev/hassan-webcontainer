@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import axios from 'axios';
+import { apiService } from '../services/api';
 import toast from 'react-hot-toast';
 import {
   Box,
@@ -77,11 +77,7 @@ const CreateProject = () => {
         tags
       };
 
-      const response = await axios.post('/api/projects', projectData, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      const response = await apiService.post('/projects', projectData);
 
       toast.success('Project created successfully!');
       

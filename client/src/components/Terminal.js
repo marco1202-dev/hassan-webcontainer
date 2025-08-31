@@ -16,8 +16,9 @@ import {
   Stop as StopIcon,
   Terminal as TerminalIcon
 } from '@mui/icons-material';
-import axios from 'axios';
+import { apiService } from '../services/api';
 import toast from 'react-hot-toast';
+import { getWebContainerUrl } from '../config/config';
 
 const Terminal = ({ projectId }) => {
   const [commandHistory, setCommandHistory] = useState([]);
@@ -91,7 +92,7 @@ const Terminal = ({ projectId }) => {
     
     try {
       // Send command to backend for execution
-      const response = await axios.post(`/api/projects/${projectId}/terminal`, {
+      const response = await apiService.post(`/projects/${projectId}/terminal`, {
         command: command.trim()
       });
 
@@ -129,7 +130,7 @@ const Terminal = ({ projectId }) => {
         return;
       } else if (command.startsWith('npm start') || command.startsWith('yarn start')) {
         addToOutput('Starting development server...', 'info');
-        addToOutput('Server running on http://localhost:3000', 'success');
+        addToOutput(`Server running on ${getWebContainerUrl()}`, 'success');
         addToOutput('Press Ctrl+C to stop', 'info');
       } else if (command.startsWith('npm run build') || command.startsWith('yarn build')) {
         addToOutput('Building project...', 'info');

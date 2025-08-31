@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import axios from 'axios';
+import { apiService } from '../services/api';
 import toast from 'react-hot-toast';
 import {
   Box,
@@ -39,11 +39,7 @@ const ProjectList = ({ onProjectClick }) => {
 
   const fetchProjects = useCallback(async () => {
     try {
-      const response = await axios.get('/api/projects', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      const response = await apiService.get('/projects');
       setProjects(response.data.projects);
     } catch (error) {
       console.error('Fetch projects error:', error);
@@ -51,7 +47,7 @@ const ProjectList = ({ onProjectClick }) => {
     } finally {
       setLoading(false);
     }
-  }, [token]);
+  }, []);
 
   useEffect(() => {
     fetchProjects();
@@ -65,11 +61,7 @@ const ProjectList = ({ onProjectClick }) => {
     setDeleting(projectId);
 
     try {
-      await axios.delete(`/api/projects/${projectId}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      await apiService.delete(`/projects/${projectId}`);
 
       toast.success('Project deleted successfully');
       setProjects(prev => prev.filter(p => p._id !== projectId));

@@ -1,4 +1,5 @@
 import { WebContainer } from '@webcontainer/api';
+import { getWebContainerUrl } from '../config/config';
 
 class WebContainerService {
   constructor() {
@@ -177,7 +178,7 @@ class WebContainerService {
       });
       
       // For now, return the default preview URL
-      return 'http://localhost:3000';
+      return getWebContainerUrl();
     } catch (error) {
       console.error('Failed to get preview URL:', error);
       throw error;

@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import axios from 'axios';
+import { apiService } from '../services/api';
 import toast from 'react-hot-toast';
 import {
   Box,
@@ -248,15 +248,9 @@ const FileUpload = () => {
         formData.append('pathMapping', JSON.stringify(pathMapping));
         
         // Use the folder upload endpoint
-        response = await axios.post(`/api/projects/${projectId}/upload/folder`, formData, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'multipart/form-data'
-          },
-          onUploadProgress: (progressEvent) => {
-            const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-            setUploadProgress(progress);
-          }
+        response = await apiService.upload(`/projects/${projectId}/upload/folder`, formData, (progressEvent) => {
+          const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+          setUploadProgress(progress);
         });
       } else if (uploadMode === 'zip') {
         // For zip mode, upload the zip file
@@ -264,15 +258,9 @@ const FileUpload = () => {
         formData.append('zip', zipFile);
         
         // Use the zip upload endpoint
-        response = await axios.post(`/api/projects/${projectId}/upload/zip`, formData, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'multipart/form-data'
-          },
-          onUploadProgress: (progressEvent) => {
-            const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-            setUploadProgress(progress);
-          }
+        response = await apiService.upload(`/projects/${projectId}/upload/zip`, formData, (progressEvent) => {
+          const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+          setUploadProgress(progress);
         });
       } else {
         // For files mode, just append the files
@@ -282,15 +270,9 @@ const FileUpload = () => {
         formData.append('uploadMode', 'files');
         
         // Use the regular upload endpoint
-        response = await axios.post(`/api/projects/${projectId}/upload`, formData, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'multipart/form-data'
-          },
-          onUploadProgress: (progressEvent) => {
-            const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-            setUploadProgress(progress);
-          }
+        response = await apiService.upload(`/projects/${projectId}/upload`, formData, (progressEvent) => {
+          const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+          setUploadProgress(progress);
         });
       }
 
