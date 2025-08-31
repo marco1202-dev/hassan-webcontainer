@@ -114,6 +114,14 @@ router.post('/login', [
     // Generate token
     const token = generateToken(user._id);
 
+    // Set explicit headers for Render.com compatibility
+    res.set({
+      'Content-Type': 'application/json',
+      'Cache-Control': 'no-cache',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+    });
+
     res.json({
       message: 'Login successful',
       token,
