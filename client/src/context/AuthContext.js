@@ -105,7 +105,13 @@ export const AuthProvider = ({ children }) => {
   // Login user
   const login = async (userData) => {
     try {
+      console.log('🔐 Attempting login with:', userData);
       const res = await apiService.post('/auth/login', userData);
+      
+      console.log('✅ Login response:', res);
+      console.log('📦 Response data:', res.data);
+      console.log('🔑 Token:', res.data.token);
+      console.log('👤 User:', res.data.user);
       
       localStorage.setItem('token', res.data.token);
       dispatch({
@@ -116,6 +122,8 @@ export const AuthProvider = ({ children }) => {
       toast.success('Login successful!');
       return { success: true };
     } catch (error) {
+      console.error('❌ Login error:', error);
+      console.error('❌ Error response:', error.response);
       const message = error.response?.data?.message || 'Login failed';
       toast.error(message);
       return { success: false, message };

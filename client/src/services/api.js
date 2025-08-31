@@ -13,6 +13,10 @@ const api = axios.create({
 // Request interceptor for adding auth token
 api.interceptors.request.use(
   (config) => {
+    console.log('🚀 API Request:', config.method?.toUpperCase(), config.url);
+    console.log('📤 Request data:', config.data);
+    console.log('🔧 Request config:', config);
+    
     const token = localStorage.getItem('token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -20,6 +24,7 @@ api.interceptors.request.use(
     return config;
   },
   (error) => {
+    console.error('❌ Request interceptor error:', error);
     return Promise.reject(error);
   }
 );
@@ -27,9 +32,16 @@ api.interceptors.request.use(
 // Response interceptor for handling common errors
 api.interceptors.response.use(
   (response) => {
+    console.log('✅ API Response:', response.config.method?.toUpperCase(), response.config.url);
+    console.log('📥 Response status:', response.status);
+    console.log('📦 Response data:', response.data);
     return response;
   },
   (error) => {
+    console.error('❌ API Response Error:', error.config?.method?.toUpperCase(), error.config?.url);
+    console.error('📥 Error status:', error.response?.status);
+    console.error('📦 Error data:', error.response?.data);
+    
     // Handle common errors
     if (error.response?.status === 401) {
       // Unauthorized - redirect to login
