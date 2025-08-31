@@ -1,0 +1,87 @@
+/* Reset and base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Ensure root element takes full height */
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Dark mode specific overrides */
+[data-theme="dark"] {
+  background-color: #0a0a0a !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] html {
+  background-color: #0a0a0a !important;
+}
+
+[data-theme="dark"] body {
+  background-color: #0a0a0a !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] #root {
+  background-color: #0a0a0a !important;
+}
+
+/* Light mode specific overrides */
+[data-theme="light"] {
+  background-color: #ffffff !important;
+  color: #1a1a1a !important;
+}
+
+[data-theme="light"] html {
+  background-color: #ffffff !important;
+}
+
+[data-theme="light"] body {
+  background-color: #ffffff !important;
+  color: #1a1a1a !important;
+}
+
+[data-theme="light"] #root {
+  background-color: #ffffff !important;
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Focus styles for accessibility */
+*:focus {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+/* Ensure proper contrast */
+@media (prefers-contrast: high) {
+  * {
+    border-color: currentColor !important;
+  }
+}
