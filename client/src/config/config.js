@@ -1,16 +1,11 @@
 // Configuration file for VibeShare client
-// Automatically detects environment and uses appropriate values
-
-const isDev = process.env.NODE_ENV === 'development';
-const isProd = process.env.NODE_ENV === 'production';
+// Uses environment variables directly
 
 const config = {
   // API Configuration
   api: {
-    // Base URL for API calls - auto-detects environment
-    baseURL: isDev 
-      ? '' // Use proxy in development
-      : process.env.REACT_APP_API_BASE_URL || 'https://api.vibeshare.com',
+    // Base URL for API calls
+    baseURL: process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000',
     
     // API version (if needed)
     version: process.env.REACT_APP_API_VERSION || 'v1',
@@ -18,8 +13,8 @@ const config = {
     // Timeout for API requests (in milliseconds)
     timeout: parseInt(process.env.REACT_APP_API_TIMEOUT) || 30000,
     
-    // Whether to use proxy (auto-detects: true for dev, false for prod)
-    useProxy: isDev,
+    // Whether to use proxy
+    useProxy: process.env.REACT_APP_USE_PROXY === 'true',
   },
 
   // App Configuration
@@ -33,24 +28,20 @@ const config = {
     // Environment
     environment: process.env.NODE_ENV || 'development',
     
-    // Debug mode (auto-detects: true for dev, false for prod)
-    debug: isDev,
+    // Debug mode
+    debug: process.env.REACT_APP_DEBUG === 'true',
   },
 
   // WebContainer Configuration
   webcontainer: {
-    // WebContainer service URL - auto-detects environment
-    serviceURL: isDev 
-      ? 'http://localhost:3000' 
-      : process.env.REACT_APP_WEBCONTAINER_URL || 'https://webcontainer.vibeshare.com',
+    // WebContainer service URL
+    serviceURL: process.env.REACT_APP_WEBCONTAINER_URL || 'http://localhost:3000',
   },
 
   // Preview Configuration
   preview: {
-    // Preview server URL - auto-detects environment
-    serverURL: isDev 
-      ? 'http://localhost:5000' 
-      : process.env.REACT_APP_PREVIEW_SERVER_URL || 'https://api.vibeshare.com',
+    // Preview server URL
+    serverURL: process.env.REACT_APP_PREVIEW_SERVER_URL || 'http://localhost:5000',
     
     // Cache busting enabled
     cacheBusting: process.env.REACT_APP_PREVIEW_CACHE_BUSTING !== 'false',
@@ -58,11 +49,11 @@ const config = {
 
   // Development Configuration
   development: {
-    // Enable hot reload (auto-detects: true for dev, false for prod)
-    hotReload: isDev,
+    // Enable hot reload
+    hotReload: process.env.REACT_APP_HOT_RELOAD === 'true',
     
-    // Enable debug logging (auto-detects: true for dev, false for prod)
-    debugLogging: isDev,
+    // Enable debug logging
+    debugLogging: process.env.REACT_APP_DEBUG_LOGGING === 'true',
   }
 };
 
@@ -83,18 +74,18 @@ export const getWebContainerUrl = () => {
 };
 
 export const isDevelopment = () => {
-  return config.app.environment === 'development';
+  return process.env.NODE_ENV === 'development';
 };
 
 export const isProduction = () => {
-  return config.app.environment === 'production';
+  return process.env.NODE_ENV === 'production';
 };
 
 export const isDebugEnabled = () => {
   return config.app.debug || config.development.debugLogging;
 };
 
-// Log configuration in development
+// Log configuration
 if (isDebugEnabled()) {
   console.log('🔧 VibeShare Configuration:', config);
   console.log('🌍 Environment:', process.env.NODE_ENV);

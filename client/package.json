@@ -25,6 +25,7 @@
     "build": "react-scripts build",
     "build:prod": "REACT_APP_NODE_ENV=production react-scripts build",
     "build:all": "npm install && npm run build",
+    "render-build": "react-scripts build",
     "deploy": "gh-pages -d build",
     "deploy:all": "npm install && npm run build:prod && npm run deploy",
     "test": "react-scripts test",
