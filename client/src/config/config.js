@@ -1,59 +1,66 @@
 // Configuration file for VibeShare client
-// Uses only environment variables from .env file
+// Uses simple config file - no environment variables needed!
+
+import simpleConfig from './simple-config';
+import localConfig from './local-config';
+
+// Choose which config to use based on current URL
+const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+const activeConfig = isLocalhost ? localConfig : simpleConfig;
 
 const config = {
   // API Configuration
   api: {
-    // Base URL for API calls - from environment
-    baseURL: process.env.REACT_APP_API_BASE_URL || '',
+    // Base URL for API calls - from active config
+    baseURL: activeConfig.apiUrl,
     
     // API version (if needed)
-    version: process.env.REACT_APP_API_VERSION || 'v1',
+    version: 'v1',
     
     // Timeout for API requests (in milliseconds)
-    timeout: parseInt(process.env.REACT_APP_API_TIMEOUT) || 30000,
+    timeout: 30000,
     
-    // Whether to use proxy - from environment
-    useProxy: process.env.REACT_APP_USE_PROXY === 'true',
+    // Whether to use proxy - from active config
+    useProxy: activeConfig.useProxy,
   },
 
   // App Configuration
   app: {
     // App name
-    name: process.env.REACT_APP_NAME || 'VibeShare',
+    name: activeConfig.appName,
     
     // App version
-    version: process.env.REACT_APP_VERSION || '1.0.0',
+    version: activeConfig.appVersion,
     
     // Environment
-    environment: process.env.NODE_ENV || 'development',
+    environment: isLocalhost ? 'development' : 'production',
     
-    // Debug mode - from environment
-    debug: process.env.REACT_APP_DEBUG === 'true',
+    // Debug mode - from active config
+    debug: activeConfig.debug,
   },
 
   // WebContainer Configuration
   webcontainer: {
-    // WebContainer service URL - from environment
-    serviceURL: process.env.REACT_APP_WEBCONTAINER_URL || '',
+    // WebContainer service URL - from active config
+    serviceURL: activeConfig.webcontainerUrl,
   },
 
   // Preview Configuration
   preview: {
-    // Preview server URL - from environment
-    serverURL: process.env.REACT_APP_PREVIEW_SERVER_URL || '',
+    // Preview server URL - from active config
+    serverURL: activeConfig.previewUrl,
     
     // Cache busting enabled
-    cacheBusting: process.env.REACT_APP_PREVIEW_CACHE_BUSTING !== 'false',
+    cacheBusting: true,
   },
 
   // Development Configuration
   development: {
-    // Enable hot reload - from environment
-    hotReload: process.env.REACT_APP_HOT_RELOAD !== 'false',
+    // Enable hot reload - from active config
+    hotReload: !activeConfig.useProxy,
     
-    // Enable debug logging - from environment
-    debugLogging: process.env.REACT_APP_DEBUG_LOGGING === 'true',
+    // Enable debug logging - from active config
+    debugLogging: activeConfig.debug,
   }
 };
 
@@ -88,11 +95,22 @@ export const isDebugEnabled = () => {
 // Log configuration in development
 if (isDebugEnabled()) {
   console.log('🔧 VibeShare Configuration:', config);
-  console.log('🌍 Environment:', process.env.NODE_ENV);
+  console.log('🌍 Environment:', config.app.environment);
   console.log('🔗 API Base URL:', config.api.baseURL);
   console.log('📱 Preview Server:', config.preview.serverURL);
   console.log('🐳 WebContainer URL:', config.webcontainer.serviceURL);
   console.log('🔄 Using Proxy:', config.api.useProxy);
+  console.log('📍 Hostname:', window.location.hostname);
+  console.log('📍 Port:', window.location.port);
+  console.log('📍 Is Localhost:', isLocalhost);
+  console.log('📍 Active Config:', activeConfig === simpleConfig ? 'simple-config.js (Production)' : 'local-config.js (Local)');
+  
+  // Debug: Show the actual config values being used
+  console.log('🔍 Debug - Active Config Values:', {
+    apiUrl: activeConfig.apiUrl,
+    useProxy: activeConfig.useProxy,
+    appName: activeConfig.appName
+  });
 }
 
 export default config;
